@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import {Home} from './Home';
-import {About} from './About';
-import {Table} from './Table';
+import {DataTable} from './DataTable';
 import {NoMatch} from './NoMatch';
 import {Layout} from './components/Layout';
 import {NavigationBar} from './components/NavigationBar';
@@ -15,12 +14,12 @@ class App extends Component {
       <React.Fragment>
         <NavigationBar />
         <Jumbotron />
+        <EnhancedTable />
         <Layout>
           <Router>
             <Switch>
               <Route exact path="/" component={Home} />
-              <Route path="/about" component={About} />
-              <Route path="/table" component={Table} />
+              <Route path="/table" component={DataTable} />
               <Route component={NoMatch} />
             </Switch>
           </Router>
