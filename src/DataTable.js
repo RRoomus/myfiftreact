@@ -23,7 +23,6 @@ import DoneIcon from '@material-ui/icons/Done';
 import EditIcon from '@material-ui/icons/Edit';
 import AddIcon from '@material-ui/icons/Add';
 import FilterListIcon from '@material-ui/icons/FilterList';
-import Form from './Form';
 
 function createData(name, address, city, countryCode, loanAmount) {
   return { name, address, city, countryCode, loanAmount };
@@ -299,13 +298,6 @@ export default function EnhancedTable() {
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
-      <Form
-            onSubmit={submission =>
-              this.setState({
-                data: [...this.state.data, submission]
-              })
-            }
-          />
         <EnhancedTableToolbar numSelected={selected.length} />
         <TableContainer>
           <Table
