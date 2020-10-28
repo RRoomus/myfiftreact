@@ -14,12 +14,11 @@ class App extends Component {
       <React.Fragment>
         <NavigationBar />
         <Jumbotron />
-        <DataTable />
         <Layout>
           <Router>
             <Switch>
               <Route exact path="/" component={Home} />
-              <Route path="/table" component={DataTable} />
+              <Route path="/datatable" component={DataTable} />
               <Route component={NoMatch} />
             </Switch>
           </Router>

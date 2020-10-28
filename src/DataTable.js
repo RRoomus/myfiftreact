@@ -19,6 +19,8 @@ import Tooltip from '@material-ui/core/Tooltip';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import DeleteIcon from '@material-ui/icons/Delete';
+import DoneIcon from '@material-ui/icons/Done';
+import EditIcon from '@material-ui/icons/Edit';
 import FilterListIcon from '@material-ui/icons/FilterList';
 
 function createData(name, calories, fat, carbs, protein) {
@@ -39,7 +41,7 @@ const rows = [
   createData('Marshmallow', 318, 0, 81, 2.0),
   createData('Nougat', 360, 19.0, 9, 37.0),
   createData('Oreo', 437, 18.0, 63, 4.0),
-];
+]
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -169,18 +171,30 @@ const EnhancedTableToolbar = (props) => {
       )}
 
       {numSelected > 0 ? (
+        <>
         <Tooltip title="Delete">
           <IconButton aria-label="delete">
             <DeleteIcon />
           </IconButton>
         </Tooltip>
+        <Tooltip title="Edit">
+          <IconButton aria-label="edit">
+            <EditIcon />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title="Done">
+          <IconButton aria-label="done">
+            <DoneIcon />
+          </IconButton>
+        </Tooltip>
+        </>
       ) : (
         <Tooltip title="Filter list">
           <IconButton aria-label="filter list">
             <FilterListIcon />
           </IconButton>
         </Tooltip>
-      )}
+      )} 
     </Toolbar>
   );
 };
