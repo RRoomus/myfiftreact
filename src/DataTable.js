@@ -21,26 +21,27 @@ import Switch from '@material-ui/core/Switch';
 import DeleteIcon from '@material-ui/icons/Delete';
 import DoneIcon from '@material-ui/icons/Done';
 import EditIcon from '@material-ui/icons/Edit';
+import AddIcon from '@material-ui/icons/Add';
 import FilterListIcon from '@material-ui/icons/FilterList';
+import Form from './Form';
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
+function createData(name, address, city, countryCode, loanAmount) {
+  return { name, address, city, countryCode, loanAmount };
 }
 
 const rows = [
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Donut', 452, 25.0, 51, 4.9),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-  createData('Honeycomb', 408, 3.2, 87, 6.5),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Jelly Bean', 375, 0.0, 94, 0.0),
-  createData('KitKat', 518, 26.0, 65, 7.0),
-  createData('Lollipop', 392, 0.2, 98, 0.0),
-  createData('Marshmallow', 318, 0, 81, 2.0),
-  createData('Nougat', 360, 19.0, 9, 37.0),
-  createData('Oreo', 437, 18.0, 63, 4.0),
+  createData('Reia Rõõmus', 'Luise 21', 'Tallinn', 'EE', 250),
+  createData('Reti Rõõmus', 'Luige 2', 'Tartu', 'EE', 10),
+  createData('Kati Karu', 'Kaarna 19', 'Haapsalu', 'EE', 0.0),
+  createData('Martin Laur', 'Outokumpu 7', 'Põlva', 'EE', 8000),
+  createData('Erki Käen', 'Linnu 8', 'Jõhvi', 'EE', 354.70),
+  createData('Doris Bozen', 'Koidu 67', 'Sillamäe', 'EE', 7821),
+  createData('Maris Lentso', 'Sütiste tee 39', 'Pärnu', 'EE', 35.50),
+  createData('Ragnar Kaus', 'Sinivoore 10', 'Rapla', 'EE', 111.90),
+  createData('Rainer Paar', 'Kalda 1', 'Rakvere', 'EE', 23.00),
+  createData('Karl Mägi', 'Mikro 156', 'Kilingi-Nõmme', 'EE', 54),
+  createData('Oliver Kapp', 'Sõpruse Puiestee 156', 'Kohtla-Nõmme', 'EE', 18.78),
+  createData('Otto Moor', 'Endla 18', 'Narva', 'EE', 856.35),
 ]
 
 function descendingComparator(a, b, orderBy) {
@@ -70,11 +71,11 @@ function stableSort(array, comparator) {
 }
 
 const headCells = [
-  { id: 'name', numeric: false, disablePadding: true, label: 'Dessert (100g serving)' },
-  { id: 'calories', numeric: true, disablePadding: false, label: 'Calories' },
-  { id: 'fat', numeric: true, disablePadding: false, label: 'Fat (g)' },
-  { id: 'carbs', numeric: true, disablePadding: false, label: 'Carbs (g)' },
-  { id: 'protein', numeric: true, disablePadding: false, label: 'Protein (g)' },
+  { id: 'name', numeric: false, disablePadding: true, label: 'Name' },
+  { id: 'address', numeric: false, disablePadding: true, label: 'Address' },
+  { id: 'city', numeric: false, disablePadding: true, label: 'City' },
+  { id: 'countryCode', numeric: false, disablePadding: true, label: 'Country Code' },
+  { id: 'loanAmount', numeric: true, disablePadding: false, label: 'Loan Amount' },
 ];
 
 function EnhancedTableHead(props) {
@@ -166,7 +167,7 @@ const EnhancedTableToolbar = (props) => {
         </Typography>
       ) : (
         <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
-          Nutrition
+          Loans
         </Typography>
       )}
 
@@ -189,11 +190,18 @@ const EnhancedTableToolbar = (props) => {
         </Tooltip>
         </>
       ) : (
+        <>
         <Tooltip title="Filter list">
           <IconButton aria-label="filter list">
             <FilterListIcon />
           </IconButton>
         </Tooltip>
+        <Tooltip title="Add">
+          <IconButton aria-label="add">
+            <AddIcon />
+          </IconButton>
+        </Tooltip>
+        </>
       )} 
     </Toolbar>
   );
@@ -291,6 +299,13 @@ export default function EnhancedTable() {
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
+      <Form
+            onSubmit={submission =>
+              this.setState({
+                data: [...this.state.data, submission]
+              })
+            }
+          />
         <EnhancedTableToolbar numSelected={selected.length} />
         <TableContainer>
           <Table
@@ -334,10 +349,18 @@ export default function EnhancedTable() {
                       <TableCell component="th" id={labelId} scope="row" padding="none">
                         {row.name}
                       </TableCell>
-                      <TableCell align="right">{row.calories}</TableCell>
-                      <TableCell align="right">{row.fat}</TableCell>
-                      <TableCell align="right">{row.carbs}</TableCell>
-                      <TableCell align="right">{row.protein}</TableCell>
+                      <TableCell> 
+                        {row.address}
+                      </TableCell>
+                      <TableCell>
+                        {row.city}
+                      </TableCell>
+                      <TableCell>
+                        {row.countryCode}
+                      </TableCell>
+                      <TableCell align="right">
+                        {row.loanAmount}
+                      </TableCell>
                     </TableRow>
                   );
                 })}
