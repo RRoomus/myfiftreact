@@ -1,18 +1,28 @@
 import React from "react";
-import TextField from "material-ui/TextField";
-import Button from "material-ui/Button";
+import {Button, TextField} from '@material-ui/core';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
 
 export default class Form extends React.Component {
-  state = {
-    name: "",
-    address: "",
-    city: "",
-    countryCode: "",
-    loanAmount: "",
-  };
+
+  constructor(props){
+    super(props)
+    console.log(props)
+    if (this.props.selectedRow){
+      this.state = this.props.selectedRow
+    }
+    else {
+      this.state = {
+        name: "",
+        address: "",
+        city: "",
+        countryCode: "",
+        loanAmount: 0,
+      };
+    }
+  }
 
   change = e => {
-    // this.props.onChange({ [e.target.name]: e.target.value });
     this.setState({
       [e.target.name]: e.target.value
     });
@@ -20,70 +30,67 @@ export default class Form extends React.Component {
 
   onSubmit = e => {
     e.preventDefault();
-    const err = this.validate();
-    if (!err) {
       this.props.onSubmit(this.state);
-      // clear form
       this.setState({
         name: "",
         address: "",
         city: "",
         countryCode: "",
-        loanAmount: "",
+        loanAmount: 0,
       });
-    }
   };
 
   render() {
     return (
-      <form>
+      <Card>
+        <CardContent>
+        <form>
         <TextField
+          label="Name"
           name="name"
-          hintText="Name"
-          floatingLabelText="Name"
           value={this.state.name}
           onChange={e => this.change(e)}
-          floatingLabelFixed
+          isRequired
         />
         <br />
         <TextField
+          label="Address"
           name="address"
-          hintText="Address"
-          floatingLabelText="Address"
           value={this.state.address}
           onChange={e => this.change(e)}
-          floatingLabelFixed
+          isRequired
         />
         <br />
         <TextField
+          label="City"
           name="city"
-          hintText="City"
-          floatingLabelText="City"
           value={this.state.city}
           onChange={e => this.change(e)}
-          floatingLabelFixed
+          isRequired
         />
         <br />
         <TextField
+          label="Country Code"
           name="countryCode"
-          hintText="Country Code"
-          floatingLabelText="Country Code"
           value={this.state.countryCode}
           onChange={e => this.change(e)}
-          floatingLabelFixed
+          isRequired
         />
         <br />
         <TextField
+          label="Loan Amount"
           name="loanAmount"
-          hintText="Loan Amount"
-          floatingLabelText="Loan Amount"
           value={this.state.loanAmount}
           onChange={e => this.change(e)}
-          floatingLabelFixed
+          isRequired
         />
         <br />
-        <Button label="Submit" onClick={e => this.onSubmit(e)} primary />
-      </form>
+        <Button onClick={e => this.onSubmit(e)} color="primary">
+          Submit
+        </Button> 
+        </form>
+        </CardContent>
+      </Card>
     );
   }
 }

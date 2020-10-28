@@ -19,29 +19,13 @@ import Tooltip from '@material-ui/core/Tooltip';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import DeleteIcon from '@material-ui/icons/Delete';
-import DoneIcon from '@material-ui/icons/Done';
 import EditIcon from '@material-ui/icons/Edit';
 import AddIcon from '@material-ui/icons/Add';
-import FilterListIcon from '@material-ui/icons/FilterList';
+import Form from './Form';
 
 function createData(name, address, city, countryCode, loanAmount) {
   return { name, address, city, countryCode, loanAmount };
 }
-
-const rows = [
-  createData('Reia Rõõmus', 'Luise 21', 'Tallinn', 'EE', 250),
-  createData('Reti Rõõmus', 'Luige 2', 'Tartu', 'EE', 10),
-  createData('Kati Karu', 'Kaarna 19', 'Haapsalu', 'EE', 0.0),
-  createData('Martin Laur', 'Outokumpu 7', 'Põlva', 'EE', 8000),
-  createData('Erki Käen', 'Linnu 8', 'Jõhvi', 'EE', 354.70),
-  createData('Doris Bozen', 'Koidu 67', 'Sillamäe', 'EE', 7821),
-  createData('Maris Lentso', 'Sütiste tee 39', 'Pärnu', 'EE', 35.50),
-  createData('Ragnar Kaus', 'Sinivoore 10', 'Rapla', 'EE', 111.90),
-  createData('Rainer Paar', 'Kalda 1', 'Rakvere', 'EE', 23.00),
-  createData('Karl Mägi', 'Mikro 156', 'Kilingi-Nõmme', 'EE', 54),
-  createData('Oliver Kapp', 'Sõpruse Puiestee 156', 'Kohtla-Nõmme', 'EE', 18.78),
-  createData('Otto Moor', 'Endla 18', 'Narva', 'EE', 856.35),
-]
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -152,7 +136,11 @@ const useToolbarStyles = makeStyles((theme) => ({
 
 const EnhancedTableToolbar = (props) => {
   const classes = useToolbarStyles();
-  const { numSelected } = props;
+  const { numSelected, selected, rows, setRows, showForm, setShowForm, setSelected } = props;
+  const handleDelete = () => {
+    setRows(rows.filter((element)=> !selected.includes(element.name)))
+    setSelected([])
+  }
 
   return (
     <Toolbar
@@ -173,34 +161,23 @@ const EnhancedTableToolbar = (props) => {
       {numSelected > 0 ? (
         <>
         <Tooltip title="Delete">
-          <IconButton aria-label="delete">
+          <IconButton aria-label="delete" onClick={handleDelete}>
             <DeleteIcon />
           </IconButton>
         </Tooltip>
+        {numSelected <= 1 ? (
         <Tooltip title="Edit">
-          <IconButton aria-label="edit">
+          <IconButton aria-label="edit" onClick={()=> setShowForm(!showForm)}>
             <EditIcon />
           </IconButton>
-        </Tooltip>
-        <Tooltip title="Done">
-          <IconButton aria-label="done">
-            <DoneIcon />
-          </IconButton>
-        </Tooltip>
+        </Tooltip>) : null } 
         </>
       ) : (
-        <>
-        <Tooltip title="Filter list">
-          <IconButton aria-label="filter list">
-            <FilterListIcon />
-          </IconButton>
-        </Tooltip>
         <Tooltip title="Add">
-          <IconButton aria-label="add">
+          <IconButton aria-label="add" onClick={()=> setShowForm(!showForm)}>
             <AddIcon />
           </IconButton>
         </Tooltip>
-        </>
       )} 
     </Toolbar>
   );
@@ -242,6 +219,23 @@ export default function EnhancedTable() {
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [ showForm, setShowForm ] = React.useState(false);
+
+  const [rows, setRows] = 
+  React.useState([
+    createData('Reia Rõõmus', 'Luise 21', 'Tallinn', 'EE', 250),
+    createData('Reti Rõõmus', 'Luige 2', 'Tartu', 'EE', 10),
+    createData('Kati Karu', 'Kaarna 19', 'Haapsalu', 'EE', 0.0),
+    createData('Martin Laur', 'Outokumpu 7', 'Põlva', 'EE', 8000),
+    createData('Erki Käen', 'Linnu 8', 'Jõhvi', 'EE', 354.70),
+    createData('Doris Bozen', 'Koidu 67', 'Sillamäe', 'EE', 7821),
+    createData('Maris Lentso', 'Sütiste tee 39', 'Pärnu', 'EE', 35.50),
+    createData('Ragnar Kaus', 'Sinivoore 10', 'Rapla', 'EE', 111.90),
+    createData('Rainer Paar', 'Kalda 1', 'Rakvere', 'EE', 23.00),
+    createData('Karl Mägi', 'Mikro 156', 'Kilingi-Nõmme', 'EE', 54),
+    createData('Oliver Kapp', 'Sõpruse Puiestee 156', 'Kohtla-Nõmme', 'EE', 18.78),
+    createData('Otto Moor', 'Endla 18', 'Narva', 'EE', 856.35),
+  ]);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -295,10 +289,32 @@ export default function EnhancedTable() {
 
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 
+  const onSubmit = (formState) => { 
+    if (formState.name===selected[0]){
+      setRows(
+        rows.map(item => 
+            item.name === selected[0] 
+            ? {...item, formState} 
+            : item 
+       ))
+    }
+    setRows([...rows, formState]) 
+  }
+
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
-        <EnhancedTableToolbar numSelected={selected.length} />
+        {showForm ? <Form onSubmit={onSubmit} 
+        selectedRow={rows.find((element)=>element.name===selected[0])}/> : null}
+        <EnhancedTableToolbar 
+          numSelected={selected.length} 
+          setSelected={setSelected}
+          selected={selected}
+          rows={rows}
+          setRows={setRows}
+          showForm={showForm}
+          setShowForm={setShowForm}
+        />
         <TableContainer>
           <Table
             className={classes.table}
