@@ -22,6 +22,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import AddIcon from '@material-ui/icons/Add';
 import Form from './Form';
+import { SelectAllOutlined } from '@material-ui/icons';
 
 function createData(name, address, city, countryCode, loanAmount) {
   return { name, address, city, countryCode, loanAmount };
@@ -289,17 +290,25 @@ export default function EnhancedTable() {
 
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 
-  const onSubmit = (formState) => { 
-    if (formState.name===selected[0]){
+  const onSubmit = (formState) => {
+    if (formState.name === selected[0]) {
       setRows(
-        rows.map(item => 
-            item.name === selected[0] 
-            ? {...item, formState} 
-            : item 
-       ))
+        rows.map(item =>
+          item.name === selected[0]
+            ? {
+              ...item,
+              name: formState.name,
+              address: formState.address,
+              city: formState.city,
+              countryCode: formState.countryCode,
+              loanAmount: formState.loanAmount
+          }
+        : item
+      ))
+    } else {
+        setRows([...rows, formState])
     }
-    setRows([...rows, formState]) 
-  }
+}
 
   return (
     <div className={classes.root}>
